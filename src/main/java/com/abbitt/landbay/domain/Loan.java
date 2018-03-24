@@ -1,6 +1,8 @@
 package com.abbitt.landbay.domain;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Loan {
 
@@ -8,12 +10,14 @@ public class Loan {
     private final long borrowerAccountId;
     private final double amount;
     private final double interestRate;
+    private final Set<LoanPart> parts;
 
     public Loan(long id, long borrowerAccountId, double amount, double interestRate) {
         this.id = id;
         this.borrowerAccountId = borrowerAccountId;
         this.amount = amount;
         this.interestRate = interestRate;
+        this.parts = new HashSet<>();
     }
 
     public long getId() {
@@ -30,6 +34,14 @@ public class Loan {
 
     public double getInterestRate() {
         return interestRate;
+    }
+
+    public Set<LoanPart> getParts() {
+        return parts;
+    }
+
+    public void addPart(LoanPart part) {
+        parts.add(part);
     }
 
     @Override

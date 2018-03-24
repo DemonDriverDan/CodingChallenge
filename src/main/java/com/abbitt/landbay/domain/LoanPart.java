@@ -1,19 +1,19 @@
 package com.abbitt.landbay.domain;
 
-public class InvestmentPart {
+public class LoanPart {
 
-    private final Loan loan;
+    private final Investment investment;
     private final double amountInvested;
     private final double percentageReturn;
 
-    public InvestmentPart(Loan loan, double amountInvested, double percentageReturn) {
-        this.loan = loan;
+    public LoanPart(Investment investment, double amountInvested, double percentageReturn) {
+        this.investment = investment;
         this.amountInvested = amountInvested;
         this.percentageReturn = percentageReturn;
     }
 
-    public Loan getLoan() {
-        return loan;
+    public Investment getInvestment() {
+        return investment;
     }
 
     public double getAmountInvested() {

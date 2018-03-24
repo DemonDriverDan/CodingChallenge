@@ -1,8 +1,6 @@
 package com.abbitt.landbay.domain;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class Investment {
 
@@ -10,14 +8,12 @@ public class Investment {
     private final long lenderAccountId;
     private final double amount;
     private final double minimumReturn;
-    private final Set<InvestmentPart> investmentParts;
 
     public Investment(long id, long lenderAccountId, double amount, double minimumReturn) {
         this.id = id;
         this.lenderAccountId = lenderAccountId;
         this.amount = amount;
         this.minimumReturn = minimumReturn;
-        this.investmentParts = new HashSet<>();
     }
 
     public long getId() {
@@ -34,14 +30,6 @@ public class Investment {
 
     public double getMinimumReturn() {
         return minimumReturn;
-    }
-
-    public Set<InvestmentPart> getInvestmentParts() {
-        return investmentParts;
-    }
-
-    public void addInvestmentPart(InvestmentPart part) {
-        investmentParts.add(part);
     }
 
     @Override
