@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
 import com.abbitt.landbay.borrower.LoanCache;
 import com.abbitt.landbay.domain.Investment;
@@ -124,8 +125,25 @@ public class InvestmentManagerImplTest {
         assertEquals(part.getAmountInvested(), 25.0);
     }
 
-    public void shouldAddPendingInvestmentToNewLoan() {
+    public void shouldFulfillInvestmentWhenNewLoanArrives() {
+        double investmentAmount = 50;
+        Investment investment = new Investment(1L, 1L, investmentAmount, 0.0);
+        loan = new Loan(1L, 1L, investmentAmount / 2, 0.0);
+        loans.add(loan);
 
+        manager.newInvestment(investment);
+
+        assertEquals(loan.getAvailableAmount(), investmentAmount / 2);
+
+        Loan loan2 = new Loan(2L, 1L, investmentAmount / 2, 0.0);
+        loans.add(loan2);
+
+        manager.recalculatePendingInvestments();
+
+        assertEquals(loan.getAvailableAmount(), 0.0);
+        assertTrue(loan.isFullyInvested());
+        assertEquals(loan2.getAvailableAmount(), 0.0);
+        assertTrue(loan2.isFullyInvested());
     }
 
 }

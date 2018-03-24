@@ -6,4 +6,5 @@ public interface InvestmentManager {
 
     void newInvestment(Investment investment);
 
+    void recalculatePendingInvestments();
 }

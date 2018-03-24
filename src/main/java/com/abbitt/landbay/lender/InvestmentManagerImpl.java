@@ -59,6 +59,11 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         fulfilledInvestments.add(investment);
     }
 
+    @Override
+    public void recalculatePendingInvestments() {
+        pendingInvestments.forEach(this::newInvestment);
+    }
+
     private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
         // Splits investment across all available loans based on their percentage of the total loan amount
         return Math.round((loanAvailableAmount / totalLoanAmounts) * investmentAmount);
