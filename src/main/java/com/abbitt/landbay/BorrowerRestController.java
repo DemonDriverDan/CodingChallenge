@@ -21,14 +21,14 @@ public final class BorrowerRestController {
     }
 
     @RequestMapping("/borrower/requestLoan")
-    public void requestLoan(@RequestParam(value="accountId") long accountId,
+    public long requestLoan(@RequestParam(value="accountId") long accountId,
                             @RequestParam(value="amount") double amount) {
         LOG.info("Account {} requested loan for {}", accountId, amount);
         long loanId = loanIds.getAndIncrement();
         Loan loan = new Loan(loanId, accountId, amount, 0.0);
         loanCache.addLoan(loan);
         LOG.info("Loan added with id {}", loanId);
-        // TODO Return
+        return loanId; // Loan report?
     }
 
     @RequestMapping("/borrower/getLoan")
