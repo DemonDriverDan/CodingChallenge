@@ -67,7 +67,13 @@ public final class InvestmentManagerImpl implements InvestmentManager {
 
     @Override
     public void recalculatePendingInvestments() {
-        pendingInvestments.forEach(this::newInvestment);
+        Iterator<Investment> iterator = pendingInvestments.iterator();
+        while (iterator.hasNext()) {
+            InvestmentReport report = newInvestment(iterator.next());
+            if (report.getState() == InvestmentReport.State.FULFILLED) {
+                iterator.remove();
+            }
+        }
     }
 
     private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
