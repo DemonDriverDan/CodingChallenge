@@ -1,6 +1,7 @@
 package com.abbitt.landbay;
 
 import com.abbitt.landbay.domain.Loan;
+import com.abbitt.landbay.exceptions.LoanMissingException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -22,5 +23,12 @@ public final class LoanCache {
 
     public Optional<Loan> getLoan(long id) {
         return loans.stream().filter(loan -> loan.getId() == id).findFirst();
+    }
+
+    public void deleteLoan(long id) throws LoanMissingException {
+        boolean anyRemoved = loans.removeIf(loan -> loan.getId() == id);
+        if (!anyRemoved) {
+            throw new LoanMissingException(id);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.abbitt.landbay;
 
 import com.abbitt.landbay.domain.Loan;
+import com.abbitt.landbay.exceptions.LoanMissingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +35,14 @@ public final class BorrowerRestController {
     @RequestMapping("/borrower/getLoan")
     public Loan getLoan(@RequestParam(value="loanId") long loanId) {
         return loanCache.getLoan(loanId).orElse(null);
+    }
+
+    @RequestMapping("/borrower/deleteLoan")
+    public void deleteLoan(@RequestParam(value="loanId") long loanId) {
+        try {
+            loanCache.deleteLoan(loanId);
+        } catch (LoanMissingException e) {
+            LOG.error("Unable to remove loan with ID {}", loanId);
+        }
     }
 }
