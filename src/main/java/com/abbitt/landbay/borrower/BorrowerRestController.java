@@ -1,4 +1,4 @@
-package com.abbitt.landbay;
+package com.abbitt.landbay.borrower;
 
 import com.abbitt.landbay.domain.Loan;
 import com.abbitt.landbay.exceptions.LoanMissingException;
