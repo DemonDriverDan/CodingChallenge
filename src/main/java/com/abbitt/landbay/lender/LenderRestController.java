@@ -21,13 +21,13 @@ public final class LenderRestController {
     }
 
     @RequestMapping("/lender/invest")
-    public void invest(@RequestParam(value="accountId") long accountId,
+    public InvestmentReport invest(@RequestParam(value="accountId") long accountId,
                        @RequestParam(value="amount") double amount) {
         LOG.info("Account {} requested investment of {}", accountId, amount);
         long id = investmentIds.getAndIncrement();
 
         Investment investment = new Investment(id, accountId, amount, 0.0);
-        investmentManager.newInvestment(investment);
+        return investmentManager.newInvestment(investment);
     }
 
 }

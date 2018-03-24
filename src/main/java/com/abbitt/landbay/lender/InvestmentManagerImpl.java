@@ -28,7 +28,9 @@ public final class InvestmentManagerImpl implements InvestmentManager {
     }
 
     @Override
-    public void newInvestment(Investment investment) {
+    public InvestmentReport newInvestment(Investment investment) {
+        InvestmentReport report = new InvestmentReport(investment);
+
         Set<Loan> availableLoans = loanCache.getLoans().stream()
                                         .filter(loan -> !loan.isFullyInvested())
                                         .collect(Collectors.toSet());
@@ -37,7 +39,8 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         if (totalAvailableLoanAmount < investment.getAmount()) {
             LOG.info("Unable to invest as loans of {} will not fulfill investment of {}", totalAvailableLoanAmount, investment.getAmount());
             pendingInvestments.add(investment);
-            return;
+            report.setPending();
+            return report;
         }
 
         LOG.info("Total loans available {}", totalAvailableLoanAmount);
@@ -54,9 +57,12 @@ public final class InvestmentManagerImpl implements InvestmentManager {
             loan.addPart(part);
             LOG.info("Invested {} in loan {}", loanInvestmentAmount, loan.getId());
             sumInvested += loanInvestmentAmount;
+            report.addLoan();
         }
         LOG.info("Investment of {} fulfilled", investment.getAmount());
         fulfilledInvestments.add(investment);
+        report.setFulfilled();
+        return report;
     }
 
     @Override
