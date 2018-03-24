@@ -1,11 +1,13 @@
 package com.abbitt.landbay.lender;
 
 import com.abbitt.landbay.domain.Investment;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Component
 public final class InvestmentCache {
 
     private final Set<Investment> investments;
