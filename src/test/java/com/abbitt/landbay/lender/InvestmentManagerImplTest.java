@@ -88,6 +88,17 @@ public class InvestmentManagerImplTest {
         assertEquals(part.getAmountInvested(), investmentAmount);
     }
 
+    public void shouldNotInvestIfLoansDoNotFillEntireAmount() {
+        double investmentAmount = 100;
+        Investment investment = new Investment(1L, 1L, investmentAmount, 0.0);
+        loan = new Loan(1L, 1L, investmentAmount / 2, 0.0);
+        loans.add(loan);
+
+        manager.newInvestment(investment);
+
+        assertEquals(loan.getParts().size(), 0);
+    }
+
     public void shouldAddPendingInvestmentToNewLoan() {
 
     }
