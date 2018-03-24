@@ -14,12 +14,10 @@ public final class LenderRestController {
     private static final Logger LOG = LoggerFactory.getLogger(LenderRestController.class);
 
     private final InvestmentManager investmentManager;
-    private final InvestmentCache investmentCache;
     private final AtomicLong investmentIds = new AtomicLong(1);
 
-    public LenderRestController(InvestmentManager investmentManager, InvestmentCache investmentCache) {
+    public LenderRestController(InvestmentManager investmentManager) {
         this.investmentManager = investmentManager;
-        this.investmentCache = investmentCache;
     }
 
     @RequestMapping("/lender/invest")
@@ -30,7 +28,6 @@ public final class LenderRestController {
 
         Investment investment = new Investment(id, accountId, amount, 0.0);
         investmentManager.newInvestment(investment);
-        investmentCache.addInvestment(investment);
     }
 
 }
