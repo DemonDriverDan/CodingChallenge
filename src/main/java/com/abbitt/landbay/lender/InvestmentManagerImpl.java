@@ -33,12 +33,14 @@ public final class InvestmentManagerImpl implements InvestmentManager {
                                         .filter(loan -> !loan.isFullyInvested())
                                         .collect(Collectors.toSet());
 
-        double totalAvailableLoanAmount = availableLoans.stream().mapToDouble(Loan::getAmount).sum();
+        double totalAvailableLoanAmount = availableLoans.stream().mapToDouble(Loan::getAvailableAmount).sum();
         if (totalAvailableLoanAmount < investment.getAmount()) {
             LOG.info("Unable to invest as loans of {} will not fulfill investment of {}", totalAvailableLoanAmount, investment.getAmount());
             pendingInvestments.add(investment);
             return;
         }
+
+        LOG.info("Total loans available {}", totalAvailableLoanAmount);
 
         double sumInvested = 0;
         Iterator<Loan> iterator = availableLoans.iterator();
@@ -50,14 +52,15 @@ public final class InvestmentManagerImpl implements InvestmentManager {
 
             LoanPart part = new LoanPart(investment, loanInvestmentAmount, 0.0);
             loan.addPart(part);
+            LOG.info("Invested {} in loan {}", loanInvestmentAmount, loan.getId());
             sumInvested += loanInvestmentAmount;
         }
-        LOG.info("Investment fulfilled");
+        LOG.info("Investment of {} fulfilled", investment.getAmount());
         fulfilledInvestments.add(investment);
     }
 
     private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
         // Splits investment across all available loans based on their percentage of the total loan amount
-        return (loanAvailableAmount / totalLoanAmounts) * investmentAmount;
+        return Math.round((loanAvailableAmount / totalLoanAmounts) * investmentAmount);
     }
 }
