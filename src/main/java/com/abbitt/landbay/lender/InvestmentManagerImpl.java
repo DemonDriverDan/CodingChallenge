@@ -45,9 +45,8 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         while (iterator.hasNext() && sumInvested < investment.getAmount()) {
             Loan loan = iterator.next();
 
-            double loanInvestmentAmount = loan.getAvailableAmount() <= investment.getAmount() ?
-                                          loan.getAvailableAmount() :
-                                          investment.getAmount();
+            double loanInvestmentAmount = calculateLoanInvestmentAmount(loan.getAvailableAmount(), investment.getAmount(),
+                                                                        totalAvailableLoanAmount);
 
             LoanPart part = new LoanPart(investment, loanInvestmentAmount, 0.0);
             loan.addPart(part);
@@ -55,5 +54,10 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         }
         LOG.info("Investment fulfilled");
         fulfilledInvestments.add(investment);
+    }
+
+    private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
+        // Splits investment across all available loans based on their percentage of the total loan amount
+        return (loanAvailableAmount / totalLoanAmounts) * investmentAmount;
     }
 }

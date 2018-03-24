@@ -99,6 +99,31 @@ public class InvestmentManagerImplTest {
         assertEquals(loan.getParts().size(), 0);
     }
 
+    public void shouldDiversifyInvestmentAcrossAllAvailableLoans() {
+        double investmentAmount = 100;
+        Investment investment = new Investment(1L, 1L, investmentAmount, 0.0);
+        loan = new Loan(1L, 1L, 50, 0.0);
+        loans.add(loan);
+        Loan loan2 = new Loan(2L, 1L, 100, 0.0);
+        loans.add(loan2);
+        Loan loan3 = new Loan(3L, 1L, 50, 0.0);
+        loans.add(loan3);
+
+        manager.newInvestment(investment);
+
+        assertEquals(loan.getParts().size(), 1);
+        LoanPart part = loan.getParts().iterator().next();
+        assertEquals(part.getAmountInvested(), 25.0);
+
+        assertEquals(loan2.getParts().size(), 1);
+        part = loan2.getParts().iterator().next();
+        assertEquals(part.getAmountInvested(), 50.0);
+
+        assertEquals(loan3.getParts().size(), 1);
+        part = loan3.getParts().iterator().next();
+        assertEquals(part.getAmountInvested(), 25.0);
+    }
+
     public void shouldAddPendingInvestmentToNewLoan() {
 
     }
