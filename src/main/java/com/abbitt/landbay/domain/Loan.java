@@ -11,6 +11,7 @@ public class Loan {
     private final double amount;
     private final double interestRate;
     private final Set<LoanPart> parts;
+    private double investedAmount;
 
     public Loan(long id, long borrowerAccountId, double amount, double interestRate) {
         this.id = id;
@@ -42,6 +43,15 @@ public class Loan {
 
     public void addPart(LoanPart part) {
         parts.add(part);
+        investedAmount += part.getAmountInvested();
+    }
+
+    public double getAvailableAmount() {
+        return amount - investedAmount;
+    }
+
+    public boolean isFullyInvested() {
+        return amount == investedAmount;
     }
 
     @Override

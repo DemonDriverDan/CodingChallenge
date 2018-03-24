@@ -4,12 +4,13 @@ import com.abbitt.landbay.domain.Loan;
 import com.abbitt.landbay.exceptions.LoanMissingException;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 @Component
-public final class LoanCache {
+public class LoanCache {
 
     private final Set<Loan> loans;
 
@@ -23,6 +24,10 @@ public final class LoanCache {
 
     public Optional<Loan> getLoan(long id) {
         return loans.stream().filter(loan -> loan.getId() == id).findFirst();
+    }
+
+    public Set<Loan> getLoans() {
+        return Collections.unmodifiableSet(loans);
     }
 
     public void deleteLoan(long id) throws LoanMissingException {
