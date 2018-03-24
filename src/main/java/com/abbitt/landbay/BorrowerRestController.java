@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class BorrowerRestController {
+public final class BorrowerRestController {
     private static final Logger LOG = LoggerFactory.getLogger(BorrowerRestController.class);
 
     @RequestMapping("/borrower/requestLoan")
