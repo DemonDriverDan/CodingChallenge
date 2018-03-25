@@ -23,6 +23,4 @@ public class LoanPart {
     public double getPercentageReturn() {
         return percentageReturn;
     }
-
-    // TODO Equals?
 }
