@@ -15,6 +15,7 @@ public class LoanCache {
     private final Set<Loan> loans;
 
     public LoanCache() {
+        // Thread safe but consistency is unreliable. A better approach should be considered
         loans = ConcurrentHashMap.newKeySet();
     }
 
