@@ -67,6 +67,7 @@ public final class InvestmentManagerImpl implements InvestmentManager {
 
     @Override
     public void recalculatePendingInvestments() {
+        LOG.info("Recalculating {} pending investments", pendingInvestments.size());
         Iterator<Investment> iterator = pendingInvestments.iterator();
         while (iterator.hasNext()) {
             InvestmentReport report = newInvestment(iterator.next());
