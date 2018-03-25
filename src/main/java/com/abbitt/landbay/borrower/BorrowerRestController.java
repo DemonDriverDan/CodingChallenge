@@ -26,10 +26,11 @@ public final class BorrowerRestController {
 
     @RequestMapping("/borrower/requestLoan")
     public long requestLoan(@RequestParam(value="accountId") long accountId,
-                            @RequestParam(value="amount") double amount) {
+                            @RequestParam(value="amount") double amount,
+                            @RequestParam(value="interestRate") double interestRate) {
         LOG.info("Account {} requested loan for {}", accountId, amount);
         long loanId = loanIds.getAndIncrement();
-        Loan loan = new Loan(loanId, accountId, amount, 0.0);
+        Loan loan = new Loan(loanId, accountId, amount, interestRate);
         loanCache.addLoan(loan);
         LOG.info("Loan added with id {}", loanId);
         investmentManager.recalculatePendingInvestments();
