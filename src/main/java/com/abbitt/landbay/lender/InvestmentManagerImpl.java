@@ -45,13 +45,18 @@ public final class InvestmentManagerImpl implements InvestmentManager {
 
         LOG.info("Total loans available {}", totalAvailableLoanAmount);
 
+        placeInvestment(investment, availableLoans, totalAvailableLoanAmount, report);
+        return report;
+    }
+
+    private void placeInvestment(Investment investment, Set<Loan> availableLoans, double totalAvailableLoanAmount, InvestmentReport report) {
         double sumInvested = 0;
         Iterator<Loan> iterator = availableLoans.iterator();
         while (iterator.hasNext() && sumInvested < investment.getAmount()) {
             Loan loan = iterator.next();
 
             double loanInvestmentAmount = calculateLoanInvestmentAmount(loan.getAvailableAmount(), investment.getAmount(),
-                                                                        totalAvailableLoanAmount);
+                totalAvailableLoanAmount);
 
             LoanPart part = new LoanPart(investment, loanInvestmentAmount, 0.0);
             loan.addPart(part);
@@ -62,7 +67,6 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         LOG.info("Investment of {} fulfilled", investment.getAmount());
         fulfilledInvestments.add(investment);
         report.setFulfilled();
-        return report;
     }
 
     @Override
