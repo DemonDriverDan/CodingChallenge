@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Component
@@ -69,6 +71,11 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         report.setFulfilled();
     }
 
+    private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
+        // Splits investment across all available loans based on their percentage of the total loan amount
+        return Math.round((loanAvailableAmount / totalLoanAmounts) * investmentAmount);
+    }
+
     @Override
     public void recalculatePendingInvestments() {
         LOG.info("Recalculating {} pending investments", pendingInvestments.size());
@@ -81,8 +88,17 @@ public final class InvestmentManagerImpl implements InvestmentManager {
         }
     }
 
-    private static double calculateLoanInvestmentAmount(double loanAvailableAmount, double investmentAmount, double totalLoanAmounts) {
-        // Splits investment across all available loans based on their percentage of the total loan amount
-        return Math.round((loanAvailableAmount / totalLoanAmounts) * investmentAmount);
+    @Override
+    public Map<Long, Double> calculateInterestOwedPerInvestor() {
+        Map<Long, Double> interestPerInvestor = new TreeMap<>();
+        for (Loan loan : loanCache.getLoans()) {
+            for (LoanPart part : loan.getParts()) {
+                double interest = part.getAmountInvested() * loan.getInterestRate();
+                Double current = interestPerInvestor.getOrDefault(part.getInvestment().getLenderAccountId(), 0.0);
+                interestPerInvestor.put(part.getInvestment().getLenderAccountId(), current + interest);
+            }
+        }
+
+        return interestPerInvestor;
     }
 }

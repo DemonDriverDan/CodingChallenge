@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Test
@@ -146,4 +147,32 @@ public class InvestmentManagerImplTest {
         assertTrue(loan2.isFullyInvested());
     }
 
+    public void shouldReturnInterestOnInvestment() {
+        double investmentAmount = 50;
+        double interestRate = 0.05;
+        Investment investment = new Investment(1L, 1L, investmentAmount, 0.0);
+        loan = new Loan(1L, 1L, investmentAmount, interestRate);
+        loans.add(loan);
+        manager.newInvestment(investment);
+
+        Map<Long, Double> interestOwedPerInvestor = manager.calculateInterestOwedPerInvestor();
+        assertEquals(interestOwedPerInvestor.size(), 1);
+        assertEquals(interestOwedPerInvestor.get(1L), 2.5);
+    }
+
+    public void shouldCalculateInterestAcrossMultipleLoans() {
+        double investmentAmount = 100;
+        Investment investment = new Investment(1L, 1L, investmentAmount, 0.0);
+        loan = new Loan(1L, 1L, 50, 0.05);
+        loans.add(loan);
+        Loan loan2 = new Loan(2L, 1L, 100, 0.015);
+        loans.add(loan2);
+        Loan loan3 = new Loan(3L, 1L, 50, 0.2);
+        loans.add(loan3);
+        manager.newInvestment(investment);
+
+        Map<Long, Double> interestOwedPerInvestor = manager.calculateInterestOwedPerInvestor();
+        assertEquals(interestOwedPerInvestor.size(), 1);
+        assertEquals(interestOwedPerInvestor.get(1L), 7.0);
+    }
 }

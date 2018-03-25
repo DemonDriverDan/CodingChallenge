@@ -30,7 +30,7 @@ public final class BorrowerRestController {
                             @RequestParam(value="interestRate") double interestRate) {
         LOG.info("Account {} requested loan for {}", accountId, amount);
         long loanId = loanIds.getAndIncrement();
-        Loan loan = new Loan(loanId, accountId, amount, interestRate);
+        Loan loan = new Loan(loanId, accountId, amount, interestRate > 1 ? interestRate / 100 : interestRate);
         loanCache.addLoan(loan);
         LOG.info("Loan added with id {}", loanId);
         investmentManager.recalculatePendingInvestments();
