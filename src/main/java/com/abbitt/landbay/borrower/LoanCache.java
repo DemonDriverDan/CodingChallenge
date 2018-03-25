@@ -5,9 +5,9 @@ import com.abbitt.landbay.exceptions.LoanMissingException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class LoanCache {
@@ -15,7 +15,7 @@ public class LoanCache {
     private final Set<Loan> loans;
 
     public LoanCache() {
-        loans = new HashSet<>();
+        loans = ConcurrentHashMap.newKeySet();
     }
 
     public void addLoan(Loan loan) {
